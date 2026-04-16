@@ -1,0 +1,171 @@
+﻿@model ClothingWebStore.Models.Product
+
+@{
+    ViewData["Title"] = "Product Details";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-0 rounded-4 p-4">
+        <div class="row">
+            
+            <!-- Product Image -->
+            <div class="col-md-5 text-center">
+                <img src="@(Model.ProductImages.FirstOrDefault()?.ImageUrl ?? "/images/no-image.png")"
+                     class="img-fluid rounded-3 shadow-sm"
+                     style="max-height: 400px; object-fit: cover;"
+                     alt="@Model.Name" />
+            </div>
+
+            <!-- Product Info -->
+            <div class="col-md-7">
+                <h2 class="fw-bold" style="color:lightpink;">@Model.Name</h2>
+                <h5 class="text-muted">@Model.Manufacturer?.Name</h5>
+
+                <p class="mt-3">@Model.Description</p>
+
+                <hr />
+
+                <p>
+                    <strong>Category:</strong>
+                    <span class="badge bg-info">@Model.Category?.Name</span>
+                </p>
+
+                <p>
+                    <strong>Barcode:</strong>
+                    @Model.ItemNumber
+                </p>
+
+                <p class="fs-3 fw-bold" style="color:hotpink">
+                    @Model.Price.ToString("C")
+                </p>
+
+                <!-- Stock -->
+                @if (Model.Stock > 0)
+                {
+                    <p class="text-success fw-bold">
+                         In Stock (@Model.Stock available)
+                    </p>
+                }
+                else
+                {
+                    <p class="text-danger fw-bold">
+                        ✘ Out of Stock
+                    </p>
+                }
+
+                <!-- Buttons -->
+                <div class="mt-4 d-flex gap-2">
+                    <button class="btn btn-info" style="background-color:pink;"
+                            onclick="addToCart(@Model.ProductId)">
+                        Add to Cart
+                    </button>
+
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary btn-lg" style="background-color:lightgray;">
+                        Back to Shop
+                    </a>
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Edit"
+                               asp-route-id="@Model.ProductId"
+                               class="btn btn-warning btn-lg">
+                            Edit
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function addToCart(productId) {
+        fetch('/Cart/AddToCart', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ productId: productId })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert("Added to cart!");
+            }
+            else {
+                alert(data.message || "Could not add item.");
+            }
+            window.location.reload();
+        });
+    }
+</script>
+
+
+
+@* @model ClothingWebStore.Models.Product
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Product</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+           Barcode:
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ItemNumber)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Stock)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Stock)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IsArchived)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IsArchived)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Category)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Category.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Manufacturer)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Manufacturer.Name)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.ProductId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
+ *@

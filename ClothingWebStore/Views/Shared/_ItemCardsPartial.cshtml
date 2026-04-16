@@ -1,0 +1,71 @@
+﻿@model ClothingWebStore.Models.Product
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+
+<div class="col-md-3" id="item-@Model.ProductId">
+
+    <div class="card" style="width: 18rem;">
+        <img class="card-img-top" src="@(Model.ProductImages.FirstOrDefault()?.ImageUrl ?? "/images/no-image.png")" alt="Card image">
+            <div class="card-body">
+               
+                <h5 class="card-title" style="text-align: center; color:black; font-weight: bold; font-style: italic; font-size:24px;"> @Model.Manufacturer.Name.ToString()</h5>
+                <p class="card-text" style="text-align: center;"> @Model.Name</p>
+              @*   <p class="card-text" style="text-align: center;"> @Model.Description</p>
+                <p class="card-text" style="text-align: center; color:steelblue;"> Category: @Model.Category.Name.ToString()</p>
+                <p class="card-text" style="text-align: center; color: pink;"> Barcode: @Model.ItemNumber</p> *@
+                <p class="card-text" style="text-align: center; color: hotpink; font-weight: bold;"> Price: @Model.Price.ToString("C")</p>
+                <p class="card-text">
+                    @if (Model.Stock > 0)
+                    {
+                        <p style="color: green; text-align: center; font-size: 12px;">In Stock</p>
+                    }
+                    else
+                    {
+                        <p style="color: red; text-align: center; font-size: 12px;">Out of Stock</p>
+                    }
+                </p>
+
+            
+            </div>
+
+        <button class="btn" style="background-color:pink; border-radius: 5px; border-color:black;" onclick="location.href='@Url.Action("Details", "Products", new { id = Model.ProductId })'">
+            Details
+        </button>
+        
+            @if (SignInManager.IsSignedIn(User))
+            {
+            <button class="btn btn-light" style="border-color:Black;" onclick="addToCart(@Model.ProductId)">
+                    Add to cart
+                </button>
+                
+            }
+        else
+        {
+            <button class="btn btn-light" style="border-color:Black;" onclick="alert('Please log in to add items to your cart.')">
+                Add to cart
+            </button>
+        }
+
+        </div>
+
+    </div>
+
+
+
+
+@* <div class="col-md-4">
+    <div class="card mb-4 shadow-sm">
+        <img src="@Model.ImageUrl" class="card-img-top" alt="@Model.Name">
+        <div class="card-body">
+            <h5 class="card-title">@Model.Name</h5>
+            <p class="card-text">@Model.Description</p>
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                </div>
+                <small class="text-muted">@Model.Price.ToString("C")</small>
+            </div>
+        </div>
+    </div>
+</div> *@

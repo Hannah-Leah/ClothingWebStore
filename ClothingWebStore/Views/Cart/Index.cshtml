@@ -1,0 +1,73 @@
+﻿@model ClothingWebStore.Models.Cart
+
+<h2>Your Shopping Cart</h2>
+
+@if (Model == null || !Model.CartItems.Any())
+{
+    <p>Your cart is empty.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.CartItems)
+            {
+                <tr>
+                    <td>
+                        <img src="@(item.Product.ProductImages.FirstOrDefault()?.ImageUrl ?? "/images/no-image.png")"
+                             width="60" />
+                    </td>
+                    <td>@item.Product.Name</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Product.Price.ToString("C")</td>
+                    <td>@(item.Quantity* item.Product.Price)</td>
+                    <td>
+                        <button class="btn btn-outline-danger"
+                                onclick="removeFromCart(@item.ProductId)">
+                            Remove
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+
+
+    </table>
+
+
+}
+
+@{
+    decimal subtotal = Model?.CartItems?.Sum(item => item.Product.Price * item.Quantity) ?? 0;
+    decimal vat = subtotal * 0.20m;   // Austria 20%
+    decimal totalWithVat = subtotal + vat;
+}
+
+<div class="text-center" style="color:hotpink;" >
+    <p>Subtotal: @subtotal.ToString("C")</p>
+    <p>VAT (20%): @vat.ToString("C")</p>
+    <h4>Total: @totalWithVat.ToString("C")</h4>
+</div>
+
+<script>
+    function removeFromCart(productId) {
+        fetch('/Cart/RemoveFromCart?productId=' + productId, {
+            method: 'POST'
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            }
+        });
+    }
+</script>
