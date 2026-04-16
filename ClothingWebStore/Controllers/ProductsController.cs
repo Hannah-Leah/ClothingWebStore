@@ -1,21 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using ClothingWebStore.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ClothingWebStore.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace ClothingWebStore.Controllers
 {
+
+    
     public class ProductsController : Controller
     {
         private readonly WebShopContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public ProductsController(WebShopContext context)
+        public ProductsController(WebShopContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Products
@@ -54,6 +60,7 @@ namespace ClothingWebStore.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         // POST: Products/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -116,6 +123,7 @@ namespace ClothingWebStore.Controllers
             return View(product);
         }
 
+       [Authorize(Roles = "Admin")]
         // POST: Products/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -153,6 +161,7 @@ namespace ClothingWebStore.Controllers
             return View(product);
         }
 
+
         // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -172,6 +181,8 @@ namespace ClothingWebStore.Controllers
 
             return View(product);
         }
+
+        [Authorize(Roles = "Admin")]
 
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]

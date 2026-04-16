@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="~/ClothingWebStore.styles.css" asp-append-version="true" />
 </head>
 <body>
+
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
@@ -23,7 +24,15 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Admin Page</a>
+                            @if (User.IsInRole("Admin"))
+                                {
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Admin Page</a>
+                                }
+                                else
+                                {
+                                <a class="nav-link text-dark" onclick="alert('You do not have access to the Admin Page.');">Admin Page</a>
+                                }
+
                         </li>
                     </ul>
                     <partial name="_LoginPartial" />
@@ -38,9 +47,6 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - ClothingWebStore - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

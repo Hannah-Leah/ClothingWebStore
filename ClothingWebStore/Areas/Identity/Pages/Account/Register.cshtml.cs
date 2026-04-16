@@ -120,7 +120,55 @@ namespace ClothingWebStore.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
+
+                    //---------------------- first user will be assisgned admin ---------------------------------------------------
+                    //var adminExists = await _userManager.GetUsersInRoleAsync("Admin");
+
+                    //if (!adminExists.Any())
+                    //{
+                    //    await _userManager.AddToRoleAsync(user, "Admin");
+                    //}
+                    //else
+                    //{
+                    //    await _userManager.AddToRoleAsync(user, "User");
+                    //}
+
+                    // CHECK IF ADMIN EXISTS
+                    var adminExists = (await _userManager.GetUsersInRoleAsync("Admin")).Any();
+
+                    var roleResult = await _userManager.AddToRoleAsync(
+                        user,
+                        adminExists ? "User" : "Admin"
+                    );
+
+                    if (!roleResult.Succeeded)
+                    {
+                        foreach (var error in roleResult.Errors)
+                        {
+                            _logger.LogError(error.Description);
+                            ModelState.AddModelError("", error.Description);
+                        }
+                    }
+
+                    //var isFirstUser = !_userManager.Users.Any();
+
+                    //var roleResult = await _userManager.AddToRoleAsync(
+                    //    user,
+                    //    isFirstUser ? "Admin" : "User"
+                    //);
+
+                    //if (!roleResult.Succeeded)
+                    //{
+                    //    foreach (var error in roleResult.Errors)
+                    //    {
+                    //        _logger.LogError(error.Description);
+                    //        ModelState.AddModelError("", error.Description);
+                    //    }
+                    //}
+
+
                     _logger.LogInformation("User created a new account with password.");
+
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
