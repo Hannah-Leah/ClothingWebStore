@@ -5,7 +5,7 @@
 <div class="col-md-3" id="item-@Model.ProductId">
 
     <div class="card" style="width: 18rem;">
-        <img class="card-img-top" src="@(Model.ProductImages.FirstOrDefault()?.ImageUrl ?? "/images/no-image.png")" alt="Card image">
+        <img class="card-img-top" src="@(Model.ProductImages.FirstOrDefault()?.ImageUrl ?? "/images/no-image.png")" alt="Card image" style="height: 300px; object-fit: cover;">
             <div class="card-body">
                
                 <h5 class="card-title" style="text-align: center; color:black; font-weight: bold; font-style: italic; font-size:24px;"> @Model.Manufacturer.Name.ToString()</h5>

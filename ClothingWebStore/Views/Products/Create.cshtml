@@ -12,7 +12,13 @@
     <div class="col-md-4">
         <form asp-action="Create" enctype="multipart/form-data">
 
-            <input type="file" name="imageFile" class="form-control" />
+            <!--
+                
+            <input type="file" name="imageFile" class="form-control" /> 
+
+            -->
+
+            <input type="file" name="imageFiles" multiple class="form-control" />
 
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
