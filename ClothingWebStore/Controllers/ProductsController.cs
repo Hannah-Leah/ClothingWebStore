@@ -329,13 +329,28 @@ namespace ClothingWebStore.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _context.Products
+        .Include(p => p.ProductImages)
+        .FirstOrDefaultAsync(p => p.ProductId == id);
+
             if (product != null)
             {
+                //  Remove product from all carts first
+                var cartItems = await _context.CartItems
+                    .Where(ci => ci.ProductId == id)
+                    .ToListAsync();
+
+                _context.CartItems.RemoveRange(cartItems);
+
+                // Remove images
+                _context.ProductImages.RemoveRange(product.ProductImages);
+
+                // Remove product
                 _context.Products.Remove(product);
+
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
