@@ -13,7 +13,7 @@
     ViewData["Title"] = "Home Page";
 }
 
-<form asp-action="Index" method="get">
+@* <form asp-action="Index" method="get">
     <div class="form-actions no-color">
         <p>
             <label>Find by Category or manufactuer: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" /></label>
@@ -52,7 +52,56 @@
             @i
         </a>
     }
+    </div> *@
+
+<div class="container">
+
+    <!-- SEARCH BAR -->
+    <div class="search-bar shadow-sm p-3 mb-4 bg-white rounded">
+        <form asp-action="Index" method="get" class="d-flex justify-content-center">
+            <input type="text" name="SearchString"
+                   value="@ViewData["CurrentFilter"]"
+                   class="form-control w-50 me-2"
+                   placeholder="Search by category or manufacturer..." />
+
+            <button type="submit" class="btn btn-dark me-2">Search</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Reset</a>
+        </form>
     </div>
+
+    <!-- SORT -->
+    <div class="text-end mb-3">
+        <span class="me-2">Sort by:</span>
+        <a asp-action="Index"
+               asp-route-sortOrder="@ViewData["PriceSort"]"
+               asp-route-searchString="@ViewData["CurrentFilter"]"
+               class="btn btn-outline-dark btn-sm">
+            Price @(ViewData["CurrentSort"] as string == "price" ? "↓" : "↑")
+        </a>
+    </div>
+
+    <!-- PRODUCTS -->
+    <div class="row g-4">
+        @foreach (var item in Model)
+        {
+            @await Html.PartialAsync("/Views/Shared/_ItemCardsPartial.cshtml", item)
+        }
+    </div>
+
+    <!-- PAGINATION -->
+    <div class="d-flex justify-content-center mt-4">
+        @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
+        {
+            <a asp-action="Index"
+                   asp-route-pageNumber="@i"
+                   asp-route-searchString="@ViewData["CurrentFilter"]"
+                   asp-route-sortOrder="@ViewData["CurrentSort"]"
+                   class="btn mx-1 @(i == (int)ViewBag.CurrentPage ? "btn-dark" : "btn-outline-dark")">
+                @i
+            </a>
+        }
+    </div>
+</div>
 
 <script>
     function addToCart(productId) {
