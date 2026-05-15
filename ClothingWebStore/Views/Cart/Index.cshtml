@@ -58,6 +58,18 @@ else
     <h4>Total: @totalWithVat.ToString("C")</h4>
 </div>
 
+@if (Model != null && Model.CartItems.Any())
+{
+    <div class="text-center mt-4">
+        <a asp-controller="Checkout"
+               asp-action="Index"
+               class="btn btn-lg"
+               style="background-color: gray; color: white;">
+            Proceed to Checkout
+        </a>
+    </div>
+}
+
 <script>
     function removeFromCart(productId) {
         fetch('/Cart/RemoveFromCart?productId=' + productId, {

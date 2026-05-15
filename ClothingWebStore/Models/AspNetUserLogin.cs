@@ -15,5 +15,5 @@ public partial class AspNetUserLogin
 
     public string UserId { get; set; }
 
-    public virtual AspNetUser User { get; set; }
+    //public virtual AspNetUser User { get; set; }
 }

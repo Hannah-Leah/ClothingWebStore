@@ -23,7 +23,7 @@ public partial class WebShopContext : DbContext
 
     public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; }
 
-    public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
+    //public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
 
     public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
 
@@ -73,9 +73,9 @@ public partial class WebShopContext : DbContext
                 .HasMaxLength(200);
             entity.Property(e => e.UserId).HasMaxLength(450);
 
-            entity.HasOne(d => d.User).WithMany(p => p.Addresses)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK_Addresses_AspNetUsers");
+            //entity.HasOne(d => d.User).WithMany(p => p.Addresses)
+            //    .HasForeignKey(d => d.UserId)
+            //    .HasConstraintName("FK_Addresses_AspNetUsers");
         });
 
         modelBuilder.Entity<AspNetRole>(entity =>
@@ -97,19 +97,19 @@ public partial class WebShopContext : DbContext
             entity.HasOne(d => d.Role).WithMany(p => p.AspNetRoleClaims).HasForeignKey(d => d.RoleId);
         });
 
-        modelBuilder.Entity<AspNetUser>(entity =>
-        {
-            entity.HasIndex(e => e.NormalizedEmail, "EmailIndex");
+        //modelBuilder.Entity<AspNetUser>(entity =>
+        //{
+        //    entity.HasIndex(e => e.NormalizedEmail, "EmailIndex");
 
-            entity.HasIndex(e => e.NormalizedUserName, "UserNameIndex")
-                .IsUnique()
-                .HasFilter("([NormalizedUserName] IS NOT NULL)");
+        //    entity.HasIndex(e => e.NormalizedUserName, "UserNameIndex")
+        //        .IsUnique()
+        //        .HasFilter("([NormalizedUserName] IS NOT NULL)");
 
-            entity.Property(e => e.Email).HasMaxLength(256);
-            entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
-            entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
-            entity.Property(e => e.UserName).HasMaxLength(256);
-        });
+        //    entity.Property(e => e.Email).HasMaxLength(256);
+        //    entity.Property(e => e.NormalizedEmail).HasMaxLength(256);
+        //    entity.Property(e => e.NormalizedUserName).HasMaxLength(256);
+        //    entity.Property(e => e.UserName).HasMaxLength(256);
+        //});
 
         modelBuilder.Entity<AspNetUserClaim>(entity =>
         {
@@ -117,7 +117,7 @@ public partial class WebShopContext : DbContext
 
             entity.Property(e => e.UserId).IsRequired();
 
-            entity.HasOne(d => d.User).WithMany(p => p.AspNetUserClaims).HasForeignKey(d => d.UserId);
+            //entity.HasOne(d => d.User).WithMany(p => p.AspNetUserClaims).HasForeignKey(d => d.UserId);
         });
 
         modelBuilder.Entity<AspNetUserLogin>(entity =>
@@ -130,7 +130,7 @@ public partial class WebShopContext : DbContext
             entity.Property(e => e.ProviderKey).HasMaxLength(128);
             entity.Property(e => e.UserId).IsRequired();
 
-            entity.HasOne(d => d.User).WithMany(p => p.AspNetUserLogins).HasForeignKey(d => d.UserId);
+            //entity.HasOne(d => d.User).WithMany(p => p.AspNetUserLogins).HasForeignKey(d => d.UserId);
         });
 
         modelBuilder.Entity<AspNetUserRole>(entity =>
@@ -141,7 +141,7 @@ public partial class WebShopContext : DbContext
 
             entity.HasOne(d => d.Role).WithMany(p => p.AspNetUserRoles).HasForeignKey(d => d.RoleId);
 
-            entity.HasOne(d => d.User).WithMany(p => p.AspNetUserRoles).HasForeignKey(d => d.UserId);
+            //entity.HasOne(d => d.User).WithMany(p => p.AspNetUserRoles).HasForeignKey(d => d.UserId);
         });
 
         modelBuilder.Entity<AspNetUserToken>(entity =>
@@ -151,7 +151,7 @@ public partial class WebShopContext : DbContext
             entity.Property(e => e.LoginProvider).HasMaxLength(128);
             entity.Property(e => e.Name).HasMaxLength(128);
 
-            entity.HasOne(d => d.User).WithMany(p => p.AspNetUserTokens).HasForeignKey(d => d.UserId);
+            //entity.HasOne(d => d.User).WithMany(p => p.AspNetUserTokens).HasForeignKey(d => d.UserId);
         });
 
         modelBuilder.Entity<Cart>(entity =>
@@ -162,10 +162,12 @@ public partial class WebShopContext : DbContext
 
             entity.Property(e => e.UserId).IsRequired();
 
-            entity.HasOne(d => d.User).WithOne(p => p.Cart)
-                .HasForeignKey<Cart>(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Carts_AspNetUsers");
+        
+
+            //entity.HasOne(d => d.User).WithOne(p => p.Cart)
+            //    .HasForeignKey<Cart>(d => d.UserId)
+            //    .OnDelete(DeleteBehavior.ClientSetNull)
+            //    .HasConstraintName("FK_Carts_AspNetUsers");
         });
 
         modelBuilder.Entity<CartItem>(entity =>
@@ -223,10 +225,10 @@ public partial class WebShopContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Orders_ShippingAddress");
 
-            entity.HasOne(d => d.User).WithMany(p => p.Orders)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.SetNull)
-                .HasConstraintName("FK_Orders_User");
+            //entity.HasOne(d => d.User).WithMany(p => p.Orders)
+            //    .HasForeignKey(d => d.UserId)
+            //    .OnDelete(DeleteBehavior.SetNull)
+            //    .HasConstraintName("FK_Orders_User");
         });
 
         modelBuilder.Entity<OrderItem>(entity =>

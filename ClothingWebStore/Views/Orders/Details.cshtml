@@ -1,0 +1,52 @@
+﻿@model ClothingWebStore.Models.Order
+
+<h2>Order #@Model.OrderId</h2>
+
+<p><strong>Date:</strong> @Model.OrderDate</p>
+<p><strong>Total:</strong> @Model.TotalPrice.ToString("C")</p>
+<p><strong>VAT:</strong> @Model.Vat.ToString("C")</p>
+
+<hr />
+
+<h4>Billing Address</h4>
+<p>
+    @Model.BillingAddress.Street <br />
+    @Model.BillingAddress.PostalCode @Model.BillingAddress.City <br />
+    @Model.BillingAddress.Country
+</p>
+
+<h4>Shipping Address</h4>
+<p>
+    @Model.ShippingAddress.Street <br />
+    @Model.ShippingAddress.PostalCode @Model.ShippingAddress.City <br />
+    @Model.ShippingAddress.Country
+</p>
+
+<hr />
+
+<h4>Items</h4>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Price at Purchase</th>
+            <th>Quantity</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model.OrderItems)
+        {
+            <tr>
+                <td>@item.Product.Name</td>
+                <td>@item.PriceAtPurchase.ToString("C")</td>
+                <td>@item.Quantity</td>
+                <td>@(item.PriceAtPurchase * item.Quantity)</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Index" class="btn btn-secondary">Back</a>

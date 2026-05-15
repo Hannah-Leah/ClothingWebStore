@@ -27,5 +27,5 @@ public partial class Order
 
     public virtual Address ShippingAddress { get; set; }
 
-    public virtual AspNetUser User { get; set; }
+    //public virtual AspNetUser User { get; set; }
 }

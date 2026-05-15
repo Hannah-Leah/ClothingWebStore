@@ -1,0 +1,93 @@
+﻿@model ClothingWebStore.Models.Cart
+
+@{
+    decimal subtotal = Model.CartItems.Sum(i => i.Product.Price * i.Quantity);
+    decimal vat = subtotal * 0.20m;
+    decimal total = subtotal + vat;
+}
+
+<h2>Checkout</h2>
+
+<form asp-action="Purchase" method="post">
+
+    <h4>Billing Address</h4>
+
+    <input name="billingStreet"
+           class="form-control mb-2"
+           placeholder="Street"
+           required />
+
+    <input name="billingCity"
+           class="form-control mb-2"
+           placeholder="City"
+           required />
+
+    <input name="billingPostalCode"
+           class="form-control mb-2"
+           placeholder="Postal Code"
+           required />
+
+    <input name="billingCountry"
+           class="form-control mb-2"
+           placeholder="Country"
+           value="Austria"
+           required />
+
+    <div class="form-check mt-3">
+        <input type="checkbox"
+               class="form-check-input"
+               id="sameAddress"
+               name="sameAddress"
+               checked
+               onchange="toggleShipping()" />
+
+        <label class="form-check-label">
+            Shipping address same as billing
+        </label>
+    </div>
+
+    <div id="shippingAddress" style="display:none;" class="mt-3">
+
+        <h4>Shipping Address</h4>
+
+        <input name="shippingStreet"
+               class="form-control mb-2"
+               placeholder="Street" />
+
+        <input name="shippingCity"
+               class="form-control mb-2"
+               placeholder="City" />
+
+        <input name="shippingPostalCode"
+               class="form-control mb-2"
+               placeholder="Postal Code" />
+
+        <input name="shippingCountry"
+               class="form-control mb-2"
+               placeholder="Country"
+               value="Austria" />
+    </div>
+
+    <hr />
+
+    <h4>Order Summary</h4>
+
+    <p>Subtotal: @subtotal.ToString("C")</p>
+    <p>VAT (20%): @vat.ToString("C")</p>
+    <h4>Total: @total.ToString("C")</h4>
+
+    <button type="submit"
+            class="btn btn-lg mt-3"
+            style="background-color: hotpink; color: white;">
+        Purchase
+    </button>
+</form>
+
+<script>
+    function toggleShipping() {
+        let checkbox = document.getElementById("sameAddress");
+        let shipping = document.getElementById("shippingAddress");
+
+        shipping.style.display = checkbox.checked ? "none" : "block";
+    }
+</script>

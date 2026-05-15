@@ -13,5 +13,5 @@ public partial class AspNetUserRole
 
     public virtual AspNetRole Role { get; set; }
 
-    public virtual AspNetUser User { get; set; }
+    //public virtual AspNetUser User { get; set; }
 }
